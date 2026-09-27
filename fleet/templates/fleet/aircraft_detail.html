@@ -1,0 +1,161 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    {{ aircraft.tail_number }} | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{{ aircraft.tail_number }}</h1>
+
+
+<div class="card">
+
+    <h2>Aircraft Information</h2>
+
+    <table>
+
+        <tr>
+            <th>Tail Number</th>
+            <td>{{ aircraft.tail_number }}</td>
+        </tr>
+
+        <tr>
+            <th>Aircraft Type</th>
+            <td>{{ aircraft.aircraft_type }}</td>
+        </tr>
+
+        <tr>
+            <th>Serial Number</th>
+            <td>{{ aircraft.manufacturer_serial_number }}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>{{ aircraft.get_status_display }}</td>
+        </tr>
+
+        <tr>
+            <th>Operational</th>
+            <td>
+                {% if aircraft.is_operational %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Fuel on Board</th>
+            <td>{{ aircraft.fuel_on_board_kg }} kg</td>
+        </tr>
+
+        <tr>
+            <th>Flight Hours</th>
+            <td>{{ aircraft.flight_hours }}</td>
+        </tr>
+
+        <tr>
+            <th>Flight Cycles</th>
+            <td>{{ aircraft.flight_cycles }}</td>
+        </tr>
+
+        <tr>
+            <th>Last Maintenance</th>
+            <td>
+                {{ aircraft.last_maintenance|default:"Not recorded" }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Next Maintenance</th>
+            <td>
+                {{ aircraft.next_maintenance|default:"Not scheduled" }}
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Maintenance Work Orders</h2>
+
+    {% if work_orders %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Work Order</th>
+                    <th>Technician</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for work_order in work_orders %}
+
+                    <tr>
+
+                        <td>
+                            <a href="{% url 'work_order_detail' work_order.id %}">
+                                {{ work_order.work_order_number }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ work_order.technician.technician_name }}
+                        </td>
+
+                        <td>
+                            {{ work_order.get_priority_display }}
+                        </td>
+
+                        <td>
+                            {{ work_order.get_status_display }}
+                        </td>
+
+                        <td>
+                            {{ work_order.due_date }}
+
+                            {% if work_order.is_overdue %}
+                                <span class="badge">
+                                    Overdue
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <p>
+            No maintenance work orders found for this aircraft.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<a href="{% url 'aircraft_list' %}">
+    ← Back to Aircraft
+</a>
+
+{% endblock %}

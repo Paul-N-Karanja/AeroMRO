@@ -1,0 +1,97 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    Inventory | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Parts Inventory</h1>
+
+
+<div class="card">
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Part Number</th>
+                <th>Description</th>
+                <th>Manufacturer</th>
+                <th>On Hand</th>
+                <th>Minimum</th>
+                <th>Location</th>
+                <th>Status</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for part in parts %}
+
+                <tr>
+
+                    <td>
+                        {{ part.part_number }}
+                    </td>
+
+                    <td>
+                        {{ part.part_description }}
+                    </td>
+
+                    <td>
+                        {{ part.manufacturer }}
+                    </td>
+
+                    <td>
+                        {{ part.quantity_on_hand }}
+                    </td>
+
+                    <td>
+                        {{ part.minimum_stock_level }}
+                    </td>
+
+                    <td>
+                        {{ part.location }}
+                    </td>
+
+                    <td>
+
+                        {% if part.is_low_stock %}
+
+                            <span class="badge">
+                                LOW STOCK
+                            </span>
+
+                        {% else %}
+
+                            OK
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="7">
+                        No parts found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

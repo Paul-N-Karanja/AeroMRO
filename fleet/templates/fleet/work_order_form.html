@@ -1,0 +1,34 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    Create Work Order | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Create Work Order</h1>
+
+
+<div class="card">
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Create Work Order
+        </button>
+
+        <a href="{% url 'work_order_list' %}">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

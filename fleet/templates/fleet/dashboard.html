@@ -1,0 +1,131 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    Dashboard | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>AeroMRO Dashboard</h1>
+
+<p>
+    Aircraft Maintenance & Fleet Operations
+</p>
+
+
+<div class="dashboard-grid">
+
+
+    <div class="stat-card">
+        <h3>Total Aircraft</h3>
+        <p>{{ aircraft_total }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Operational</h3>
+        <p>{{ aircraft_active }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Maintenance</h3>
+        <p>{{ aircraft_maintenance }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Grounded</h3>
+        <p>{{ aircraft_grounded }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Open Work Orders</h3>
+        <p>{{ open_work_orders }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Overdue</h3>
+        <p>{{ overdue_work_orders }}</p>
+    </div>
+
+
+    <div class="stat-card">
+        <h3>Low Stock Parts</h3>
+        <p>{{ low_stock_parts }}</p>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Recent Work Orders</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Work Order</th>
+                <th>Aircraft</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Due Date</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for work_order in recent_work_orders %}
+
+                <tr>
+
+                    <td>
+                        <a href="{% url 'work_order_detail' work_order.id %}">
+                            {{ work_order.work_order_number }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ work_order.aircraft.tail_number }}
+                    </td>
+
+                    <td>
+                        {{ work_order.get_priority_display }}
+                    </td>
+
+                    <td>
+                        {{ work_order.get_status_display }}
+                    </td>
+
+                    <td>
+                        {{ work_order.due_date }}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="5">
+                        No work orders found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+{% endblock %}

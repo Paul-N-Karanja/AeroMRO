@@ -1,0 +1,165 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    {{ work_order.work_order_number }} | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>{{ work_order.work_order_number }}</h1>
+
+
+<div class="card">
+
+    <h2>Work Order Information</h2>
+
+    <table>
+
+        <tr>
+            <th>Work Order</th>
+            <td>{{ work_order.work_order_number }}</td>
+        </tr>
+
+        <tr>
+            <th>Description</th>
+            <td>{{ work_order.work_order_description }}</td>
+        </tr>
+
+        <tr>
+            <th>Aircraft</th>
+            <td>
+                <a href="{% url 'aircraft_detail' work_order.aircraft.id %}">
+                    {{ work_order.aircraft.tail_number }}
+                </a>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Technician</th>
+            <td>{{ work_order.technician.technician_name }}</td>
+        </tr>
+
+        <tr>
+            <th>Priority</th>
+            <td>{{ work_order.get_priority_display }}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>{{ work_order.get_status_display }}</td>
+        </tr>
+
+        <tr>
+            <th>Scheduled Date</th>
+            <td>{{ work_order.scheduled_date }}</td>
+        </tr>
+
+        <tr>
+            <th>Due Date</th>
+            <td>{{ work_order.due_date }}</td>
+        </tr>
+
+        <tr>
+            <th>Estimated Hours</th>
+            <td>{{ work_order.estimated_hours }}</td>
+        </tr>
+
+        <tr>
+            <th>Actual Hours</th>
+            <td>{{ work_order.actual_hours }}</td>
+        </tr>
+
+    </table>
+
+
+    {% if work_order.is_overdue %}
+
+        <p class="badge">
+            This work order is overdue.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card">
+
+    <h2>Required Parts</h2>
+
+    {% if required_parts %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Part</th>
+                    <th>Required</th>
+                    <th>Used</th>
+                    <th>Available</th>
+                    <th>Shortage</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in required_parts %}
+
+                    <tr>
+
+                        <td>
+                            {{ item.part.part_number }}
+                        </td>
+
+                        <td>
+                            {{ item.quantity_required }}
+                        </td>
+
+                        <td>
+                            {{ item.quantity_used }}
+                        </td>
+
+                        <td>
+                            {{ item.part.quantity_on_hand }}
+                        </td>
+
+                        <td>
+
+                            {% if item.parts_available %}
+
+                                0
+
+                            {% else %}
+
+                                {{ item.shortage_quantity }}
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <p>
+            No parts have been assigned to this work order.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<a href="{% url 'work_order_list' %}">
+    ← Back to Work Orders
+</a>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "fleet/base.html" %}
+
+{% block title %}
+    Aircraft | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Aircraft</h1>
+
+<div class="card">
+
+    <form method="get">
+
+        <label for="search">
+            Search Aircraft:
+        </label>
+
+        <input
+            type="text"
+            id="search"
+            name="search"
+            value="{{ search_query }}"
+            placeholder="Tail number"
+        >
+
+        <label for="status">
+            Status:
+        </label>
+
+        <select id="status" name="status">
+
+            <option value="">
+                All
+            </option>
+
+            {% for value, label in status_choices %}
+
+                <option
+                    value="{{ value }}"
+                    {% if status_filter == value %}
+                        selected
+                    {% endif %}
+                >
+                    {{ label }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            Filter
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Tail Number</th>
+                <th>Aircraft Type</th>
+                <th>Status</th>
+                <th>Flight Hours</th>
+                <th>Flight Cycles</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+            {% for aircraft in aircrafts %}
+
+                <tr>
+
+                    <td>
+                        <a href="{% url 'aircraft_detail' aircraft.id %}">
+                            {{ aircraft.tail_number }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ aircraft.aircraft_type }}
+                    </td>
+
+                    <td>
+                        <span class="badge">
+                            {{ aircraft.get_status_display }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ aircraft.flight_hours }}
+                    </td>
+
+                    <td>
+                        {{ aircraft.flight_cycles }}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="5">
+                        No aircraft found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

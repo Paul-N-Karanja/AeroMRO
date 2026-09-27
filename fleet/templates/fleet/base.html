@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            AeroMRO
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'fleet/style.css' %}">
+</head>
+
+<body>
+
+    <header class="topbar">
+
+    <div class="brand">
+        <a href="{% url 'dashboard' %}">
+            AeroMRO
+        </a>
+    </div>
+
+    <nav>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'aircraft_list' %}">
+            Aircraft
+        </a>
+
+        <a href="{% url 'work_order_list' %}">
+            Work Orders
+        </a>
+
+        <a href="{% url 'part_list' %}">
+            Inventory
+        </a>
+
+        <a href="/admin/">
+            Admin
+        </a>
+
+    </nav>
+
+</header>
+
+
+    <main class="container">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</body>
+</html>

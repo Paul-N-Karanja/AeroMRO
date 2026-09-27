@@ -1,0 +1,98 @@
+{% extends "fleet/base.html" %}
+
+
+{% block title %}
+    Work Orders | AeroMRO
+{% endblock %}
+
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+
+    <h1>Maintenance Work Orders</h1>
+
+    <a href="{% url 'work_order_create' %}">
+        + Create Work Order
+    </a>
+
+</div>
+
+
+<div class="card">
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Work Order</th>
+                <th>Aircraft</th>
+                <th>Technician</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Due Date</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for work_order in work_orders %}
+
+                <tr>
+
+                    <td>
+                        <a href="{% url 'work_order_detail' work_order.id %}">
+                            {{ work_order.work_order_number }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ work_order.aircraft.tail_number }}
+                    </td>
+
+                    <td>
+                        {{ work_order.technician.technician_name }}
+                    </td>
+
+                    <td>
+                        {{ work_order.get_priority_display }}
+                    </td>
+
+                    <td>
+                        {{ work_order.get_status_display }}
+                    </td>
+
+                    <td>
+
+                        {{ work_order.due_date }}
+
+                        {% if work_order.is_overdue %}
+                            <span class="badge">
+                                Overdue
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="6">
+                        No work orders found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
